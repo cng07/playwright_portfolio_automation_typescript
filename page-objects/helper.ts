@@ -1,0 +1,36 @@
+import { Page } from "@playwright/test";
+import * as csv from '@fast-csv/parse';
+
+export class Helper {
+
+    readonly page: Page
+
+    constructor(page: Page) {
+        this.page = page
+    }
+
+    async pause(ms: number) {
+        await this.page.waitForTimeout(ms); // wait for x milliseconds
+    }
+
+    async getLinkOnCSV(rowNum: number, header: string) {
+        // sample:  await this.page.goto(await this.h.getLinkOnCSV([row],[headerValue]));
+        let myObject: any = new Promise((resolve) => {
+            let dataArray: JSON[] = [];
+            csv.parseFile("./test-data/linkFile.csv", { headers: true })
+                .on("data", (data) => {
+                    dataArray.push(data);
+                })
+                .on("end", () => {
+                    resolve(dataArray);
+                });
+        });
+        let output = await myObject;
+        let dataVal = output[rowNum][header];
+        return dataVal;
+    }
+
+    getRandomNumber(min: number = 1, max: number = 5): number {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+}
