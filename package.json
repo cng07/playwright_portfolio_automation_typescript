@@ -1,0 +1,23 @@
+{
+  "name": "playwright_portfolio_automation_typescript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cng07/playwright_portfolio_automation_typescript.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/cng07/playwright_portfolio_automation_typescript/issues"
+  },
+  "homepage": "https://github.com/cng07/playwright_portfolio_automation_typescript#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.2.2"
+  }
+}
