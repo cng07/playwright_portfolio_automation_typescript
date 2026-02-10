@@ -77,13 +77,14 @@ pipeline {
                     steps {
                         echo '🧪 Running Chromium tests...'
                         script {
-                            docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").inside('-u root:root') {
-                                sh """
-                                    npx playwright test --project=chromium \
-                                    ${params.GREP_PATTERN ? "--grep '${params.GREP_PATTERN}'" : ''} \
-                                    --reporter=html,json,junit
-                                """
-                            }
+                            // Windows-compatible Docker run command
+                            bat """
+                                docker run --rm ^
+                                -v "%WORKSPACE%/playwright-report:/app/playwright-report" ^
+                                -v "%WORKSPACE%/test-results:/app/test-results" ^
+                                ${DOCKER_IMAGE}:${DOCKER_TAG} ^
+                                npx playwright test --project=chromium ${params.GREP_PATTERN ? "--grep ${params.GREP_PATTERN}" : ''} --reporter=html,json,junit
+                            """
                         }
                     }
                 }
@@ -95,13 +96,14 @@ pipeline {
                     steps {
                         echo '🧪 Running Firefox tests...'
                         script {
-                            docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").inside('-u root:root') {
-                                sh """
-                                    npx playwright test --project=firefox \
-                                    ${params.GREP_PATTERN ? "--grep '${params.GREP_PATTERN}'" : ''} \
-                                    --reporter=html,json,junit
-                                """
-                            }
+                            // Windows-compatible Docker run command
+                            bat """
+                                docker run --rm ^
+                                -v "%WORKSPACE%/playwright-report:/app/playwright-report" ^
+                                -v "%WORKSPACE%/test-results:/app/test-results" ^
+                                ${DOCKER_IMAGE}:${DOCKER_TAG} ^
+                                npx playwright test --project=firefox ${params.GREP_PATTERN ? "--grep ${params.GREP_PATTERN}" : ''} --reporter=html,json,junit
+                            """
                         }
                     }
                 }
@@ -113,13 +115,14 @@ pipeline {
                     steps {
                         echo '🧪 Running WebKit tests...'
                         script {
-                            docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").inside('-u root:root') {
-                                sh """
-                                    npx playwright test --project=webkit \
-                                    ${params.GREP_PATTERN ? "--grep '${params.GREP_PATTERN}'" : ''} \
-                                    --reporter=html,json,junit
-                                """
-                            }
+                            // Windows-compatible Docker run command
+                            bat """
+                                docker run --rm ^
+                                -v "%WORKSPACE%/playwright-report:/app/playwright-report" ^
+                                -v "%WORKSPACE%/test-results:/app/test-results" ^
+                                ${DOCKER_IMAGE}:${DOCKER_TAG} ^
+                                npx playwright test --project=webkit ${params.GREP_PATTERN ? "--grep ${params.GREP_PATTERN}" : ''} --reporter=html,json,junit
+                            """
                         }
                     }
                 }
@@ -130,10 +133,14 @@ pipeline {
             steps {
                 echo '📊 Generating test reports...'
                 script {
-                    docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").inside('-u root:root') {
-                        // Playwright HTML report is already generated
-                        sh 'ls -la playwright-report || echo "No report directory"'
-                    }
+                    // Reports are already generated in the test stages
+                    bat """
+                        if exist playwright-report\\index.html (
+                            echo Reports generated successfully
+                        ) else (
+                            echo Warning: No report directory found
+                        )
+                    """
                 }
             }
         }
@@ -160,9 +167,9 @@ pipeline {
             // Publish JUnit test results (if generated)
             junit testResults: 'test-results/**/*.xml', allowEmptyResults: true
             
-            // Clean up Docker images to save space
+            // Clean up Docker images to save space (optional)
             script {
-                sh "docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true"
+                bat "docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || exit 0"
             }
         }
         
