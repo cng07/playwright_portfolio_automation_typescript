@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  playwright-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: playwright-portfolio-tests
+
+    # Environment variables
+    environment:
+      - CI=true
+      - PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
+    # Volume mounts - preserve reports and results on host
+    volumes:
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results
+
+    # Command to run (can be overridden)
+    command: npx playwright test
+
+    # Network mode
+    network_mode: bridge
+
+    # Resource limits (optional - adjust based on your needs)
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+
+# Additional services can be added here (e.g., for running local app)
+# services:
+#   web-app:
+#     image: your-web-app-image
+#     ports:
+#       - "3000:3000"

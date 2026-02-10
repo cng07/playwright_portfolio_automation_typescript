@@ -1,0 +1,33 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Test artifacts
+test-results
+playwright-report
+playwright/.cache
+
+# Git
+.git
+.gitignore
+.github
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# CI/CD
+.jenkins
+
+# Documentation
+*.md
+!README.md
+
+# Logs
+*.log

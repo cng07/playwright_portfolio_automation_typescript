@@ -6,3 +6,22 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Docker
+*.log
+.docker/
+
+# CI/CD
+.jenkins/
+*.xml
+results.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

@@ -3,7 +3,22 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:ui": "npx playwright test --ui",
+    "test:chrome": "npx playwright test --project=chromium",
+    "test:firefox": "npx playwright test --project=firefox",
+    "test:webkit": "npx playwright test --project=webkit",
+    "test:debug": "npx playwright test --debug",
+    "test:smoke": "npx playwright test --grep @smoke",
+    "report": "npx playwright show-report",
+    "docker:build": "docker build -t playwright-portfolio-tests .",
+    "docker:run": "docker run --rm -v ${PWD}/playwright-report:/app/playwright-report -v ${PWD}/test-results:/app/test-results playwright-portfolio-tests",
+    "docker:compose:up": "docker-compose up --build",
+    "docker:compose:down": "docker-compose down",
+    "ci": "npx playwright test --reporter=html,json,junit"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cng07/playwright_portfolio_automation_typescript.git"
