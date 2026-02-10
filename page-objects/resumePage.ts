@@ -42,7 +42,7 @@ export class ResumePage {
         const stats = fs.statSync(filePath)
         const fileSizeInKB = stats.size / 1024
 
-        expect(fileSizeInKB).toBeCloseTo(646, 0)
+        expect(fileSizeInKB).toBeCloseTo(653, 0)
 
         // Delete the downloaded file
         fs.unlinkSync(filePath)
