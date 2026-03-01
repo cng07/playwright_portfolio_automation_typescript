@@ -8,6 +8,7 @@ export class ProjectsPage {
 
     readonly textHighlights: Locator
     readonly textTechnologies: Locator
+    readonly navProjectsLink: Locator
 
     // Navigation Helper
     readonly projectsButton: Locator
@@ -18,12 +19,12 @@ export class ProjectsPage {
 
         this.textHighlights = page.getByText('Highlights')
         this.textTechnologies = page.getByText('Technologies')
-
+        this.navProjectsLink = page.getByRole('link', { name: 'Projects', exact: true })
         this.projectsButton = page.getByText('projects')
     }
 
     async goToProjectsPage() {
-        await this.projectsButton.click()
+        await this.navProjectsLink.click()
         await this.page.waitForLoadState('domcontentloaded')
         await expect(this.page).toHaveTitle("Carlos Ng | Portfolio")
     }
@@ -40,11 +41,11 @@ export class ProjectsPage {
 
     async verifyProject2() {
         await expect(this.page.getByText('Portfolio Website Automation (TypeScript)')).toBeVisible()
-        await expect(this.page.getByText('Advanced Playwright automation framework using TypeScript. Implements Page Object Model (POM) architecture for better scalability, type safety, and maintainability.')).toBeVisible()
+        await expect(this.page.getByText('Advanced Playwright automation framework using TypeScript with containerization and CI/CD support. Implements Page Object Model (POM) architecture for better scalability, type safety, and maintainability. Features Docker containerization and flexible CI/CD options with Jenkins and GitHub Actions.')).toBeVisible()
         await expect(this.textHighlights.nth(1)).toBeVisible()
         await expect(this.page.getByText('Strongly typed test architecture with TypeScript')).toBeVisible()
         await expect(this.page.getByText('Page Object Model (POM) implementation')).toBeVisible()
-        await expect(this.page.getByText('Automated CI/CD pipelines via GitHub Actions')).toBeVisible()
+        await expect(this.page.getByText('Multi-platform CI/CD support (Jenkins & GitHub Actions)')).toBeVisible()
         await expect(this.textTechnologies.nth(1)).toBeVisible()
     }
 

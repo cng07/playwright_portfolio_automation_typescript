@@ -8,12 +8,14 @@ export class HomePage {
     // Navigation Bar Elements
     readonly navLogo: Locator
     readonly navHomeLink: Locator
+    readonly navProjectsLink: Locator
     readonly navResumeLink: Locator
     readonly navCertificationsLink: Locator
     readonly navEducationLink: Locator
     readonly navAboutLink: Locator
     readonly navContactLink: Locator
     readonly mobileMenuBtn: Locator
+    readonly navMore: Locator
 
     // Hero Section Elements
     readonly profileImage: Locator
@@ -52,11 +54,13 @@ export class HomePage {
         // Navigation Bar Elements
         this.navLogo = page.locator('a.nav-logo')
         this.navHomeLink = page.getByRole('link', { name: 'Home' })
+        this.navProjectsLink = page.getByRole('link', { name: 'Projects', exact: true })
         this.navResumeLink = page.getByRole('link', { name: 'Resume' })
-        this.navCertificationsLink = page.getByRole('link', { name: 'Certifications' })
-        this.navEducationLink = page.getByRole('link', { name: 'Education' })
+        this.navCertificationsLink = page.getByRole('menuitem', { name: 'Certifications' })
+        this.navEducationLink = page.getByRole('menuitem', { name: 'Education' })
         this.navAboutLink = page.getByRole('link', { name: 'About' })
         this.navContactLink = page.getByRole('link', { name: 'Contact' })
+        this.navMore = page.getByRole('button', { name: 'More' })
         this.mobileMenuBtn = page.locator('button.mobile-menu-btn')
 
         // Hero Section Elements
@@ -103,10 +107,12 @@ export class HomePage {
         await expect(this.navLogo).toBeVisible()
         await expect(this.navHomeLink).toBeVisible()
         await expect(this.navResumeLink).toBeVisible()
-        await expect(this.navCertificationsLink).toBeVisible()
-        await expect(this.navEducationLink).toBeVisible()
         await expect(this.navAboutLink).toBeVisible()
         await expect(this.navContactLink).toBeVisible()
+        await expect(this.navMore).toBeVisible()
+        await this.navMore.click()
+        await expect(this.navCertificationsLink).toBeVisible()
+        await expect(this.navEducationLink).toBeVisible()
         // await expect(this.mobileMenuBtn).toBeVisible() only visible on mobile
     }
 
