@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import * as csv from '@fast-csv/parse';
 
 export class Helper {
@@ -32,5 +32,32 @@ export class Helper {
 
     getRandomNumber(min: number = 1, max: number = 5): number {
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    buildInternalUrls(paths: string[]) {
+        const origin = new URL(this.page.url()).origin;
+        return paths.map((path) => `${origin}${path.startsWith('/') ? path : `/${path}`}`);
+    }
+
+    async verifyUrlsApiResponses(
+        urls: string[],
+        options?: { timeout?: number; urlType?: string }
+    ) {
+        const timeout = options?.timeout ?? 15000;
+        const urlType = options?.urlType ?? 'URL';
+
+        for (const url of urls) {
+            const response = await this.page.request.get(url, { timeout });
+            expect(response.status(), `Expected ${urlType} to be reachable: ${url}`).toBeGreaterThanOrEqual(200);
+            expect(response.status(), `Expected ${urlType} to be reachable: ${url}`).toBeLessThan(400);
+        }
+    }
+
+    async verifyInternalPathsApiResponses(
+        paths: string[],
+        options?: { timeout?: number }
+    ) {
+        const urls = this.buildInternalUrls(paths);
+        await this.verifyUrlsApiResponses(urls, { timeout: options?.timeout ?? 15000, urlType: 'internal URL' });
     }
 }

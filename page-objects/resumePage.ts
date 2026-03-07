@@ -130,14 +130,7 @@ export class ResumePage {
     }
 
     async verifyResumeInternalLinksApiResponses() {
-        const origin = new URL(this.page.url()).origin
-        const internalUrls = [`${origin}/resume`, `${origin}/privacy`, `${origin}/terms`]
-
-        for (const url of internalUrls) {
-            const response = await this.page.request.get(url, { timeout: 15000 })
-            expect(response.status(), `Expected internal URL to be reachable: ${url}`).toBeGreaterThanOrEqual(200)
-            expect(response.status(), `Expected internal URL to be reachable: ${url}`).toBeLessThan(400)
-        }
+        await this.h.verifyInternalPathsApiResponses(['/resume', '/privacy', '/terms'])
     }
 
     async verifyAllResumePageElements() {

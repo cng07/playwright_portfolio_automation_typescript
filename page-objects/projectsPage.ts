@@ -172,12 +172,7 @@ export class ProjectsPage {
                 .map((link) => link.getAttribute('href'))
                 .filter((href): href is string => Boolean(href))
         )
-
-        for (const url of repositoryHrefs) {
-            const response = await this.page.request.get(url, { timeout: 30000 })
-            expect(response.status(), `Expected repository URL to be reachable: ${url}`).toBeGreaterThanOrEqual(200)
-            expect(response.status(), `Expected repository URL to be reachable: ${url}`).toBeLessThan(400)
-        }
+        await this.h.verifyUrlsApiResponses(repositoryHrefs, { timeout: 30000, urlType: 'repository URL' })
     }
 
     async verifyMoreProjectsComingSection() {
@@ -193,14 +188,7 @@ export class ProjectsPage {
     }
 
     async verifyInternalLinksApiResponses() {
-        const origin = new URL(this.page.url()).origin
-        const internalUrls = [`${origin}/projects`, `${origin}/privacy`, `${origin}/terms`]
-
-        for (const url of internalUrls) {
-            const response = await this.page.request.get(url, { timeout: 15000 })
-            expect(response.status(), `Expected internal URL to be reachable: ${url}`).toBeGreaterThanOrEqual(200)
-            expect(response.status(), `Expected internal URL to be reachable: ${url}`).toBeLessThan(400)
-        }
+        await this.h.verifyInternalPathsApiResponses(['/projects', '/privacy', '/terms'])
     }
 
     async verifyAllProjectsPageElements() {
