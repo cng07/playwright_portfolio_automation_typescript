@@ -1,8 +1,16 @@
 # Portfolio Automation Testing
 
-Automated testing framework for the [Portfolio website](https://carlos-ng-portfolio.vercel.app/) using **Playwright** and **TypeScript**.
+Automated testing framework for the live portfolio website [carlosng07.vercel.app](https://carlosng07.vercel.app/) using Playwright and TypeScript.
 
-## 🚀 Getting Started
+## Overview
+
+- Page Object Model (POM) architecture for maintainable test code.
+- Cross-browser test execution on Chromium, Firefox, and WebKit.
+- Coverage for UI validation, direct URL checks, download checks, and API/link health checks.
+- CI/CD support with Jenkins and GitHub Actions.
+- Docker support for consistent test execution environments.
+
+## Getting Started
 
 ### Prerequisites
 
@@ -12,115 +20,65 @@ Automated testing framework for the [Portfolio website](https://carlos-ng-portfo
 ### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/carlosng07/playwright_portfolio_automation_typescript.git
-   cd playwright_portfolio_automation_typescript
-   ```
+
+```bash
+git clone https://github.com/cng07/playwright_portfolio_automation_typescript.git
+cd playwright_portfolio_automation_typescript
+```
 
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
+
+```bash
+npm install
+```
 
 3. Install Playwright browsers:
-   ```bash
-   npx playwright install
-   ```
 
-## 🛠️ Usage
+```bash
+npx playwright install
+```
+
+## Usage
 
 ### Run Tests
 
 Run all tests:
+
 ```bash
 npx playwright test
 ```
 
-Run with UI mode (interactive):
+Run in UI mode (interactive):
+
 ```bash
 npx playwright test --ui
 ```
 
-Run with headed mode (visible browser):
+Run in headed mode (visible browser):
+
 ```bash
 npx playwright test --headed
 ```
 
-Run specific test file:
+Run a specific suite:
+
 ```bash
-npx playwright test tests/home.test.ts
+npx playwright test tests/education.test.ts
 ```
 
-Run specific test by tag:
+Run tests by tag (example):
+
 ```bash
 npx playwright test --grep "@runSolo"
 ```
 
 ### View Reports
 
-After running tests, view the HTML report:
 ```bash
 npx playwright show-report
 ```
 
-## 🐳 Docker Support
-
-Run tests in Docker containers for consistent, isolated execution:
-
-### Quick Start with Docker:
-```bash
-# Build Docker image
-npm run docker:build
-
-# Run tests in Docker
-npm run docker:run
-
-# Or use Docker Compose
-npm run docker:compose:up
-```
-
-### Manual Docker Commands:
-```bash
-# Build image
-docker build -t playwright-portfolio-tests .
-
-# Run all tests
-docker run --rm \
-  -v ${PWD}/playwright-report:/app/playwright-report \
-  -v ${PWD}/test-results:/app/test-results \
-  playwright-portfolio-tests
-
-# Run specific browser
-docker run --rm playwright-portfolio-tests npx playwright test --project=chromium
-```
-
-## 🔄 CI/CD with Jenkins
-
-This project is fully configured for Jenkins CI/CD with Docker integration.
-
-### Features:
-- ✅ **Parallel Execution** - Runs tests across Chromium, Firefox, WebKit simultaneously
-- ✅ **Docker Isolation** - Clean environment for each test run
-- ✅ **HTML Reports** - Interactive reports with screenshots/videos
-- ✅ **Email Notifications** - Alerts on success/failure
-- ✅ **Scheduled Runs** - Automated nightly testing
-- ✅ **GitHub Integration** - Trigger on push/PR
-
-### Setup Guide:
-📖 **See [JENKINS_SETUP.md](./JENKINS_SETUP.md)** for complete setup instructions
-
-### Quick Setup:
-1. Install required Jenkins plugins (Docker Pipeline, HTML Publisher, Email-ext)
-2. Create new Pipeline job pointing to `Jenkinsfile`
-3. Configure email notifications
-4. Run your first build!
-
-### Video Tutorials:
-- [Jenkins + Playwright Setup](https://www.youtube.com/watch?v=RBVswbsRDMQ) - Complete walkthrough
-- [Docker Integration](https://www.youtube.com/watch?v=7uKo-xnNXu0) - Pipeline setup
-- [Email Notifications](https://www.youtube.com/watch?v=FX322RVNGj4) - Config guide
-
-## 📜 Available npm Scripts
+## Available npm Scripts
 
 ```bash
 # Test execution
@@ -142,54 +100,113 @@ npm run docker:run          # Run tests in Docker
 npm run docker:compose:up   # Run with Docker Compose
 npm run docker:compose:down # Stop Docker Compose
 
-# CI/CD
-npm run ci                  # Run tests with CI reporters (HTML, JSON, JUnit)
+# CI/CD style local run
+npm run ci                  # Run tests with HTML, JSON, and JUnit reporters
 
-
-## 📂 Project Structure
-
+# MCP
+npm run mcp:playwright            # Start Playwright MCP server
+npm run mcp:playwright:headless   # Start Playwright MCP server in headless Chromium
 ```
+
+## Test Coverage
+
+Current suites:
+
+- `tests/home.test.ts`
+- `tests/about.test.ts`
+- `tests/projects.test.ts`
+- `tests/resume.test.ts`
+- `tests/contact.test.ts`
+- `tests/experience.test.ts`
+- `tests/education.test.ts`
+- `tests/certifications.test.ts`
+
+Coverage includes:
+
+- Navigation and page-level UI assertions across all main pages.
+- Accessibility checks such as `Skip to content` and `#main-content` visibility.
+- Direct URL validation for page entry points.
+- API/link checks for internal routes (`/privacy`, `/terms`, etc.).
+- External link reachability checks (GitHub, LinkedIn, IEEE, company links, and publication links).
+- Resume PDF viewer and download validation (metadata, content-type, and file-size checks).
+
+## Docker Support
+
+Quick start:
+
+```bash
+npm run docker:build
+npm run docker:run
+npm run docker:compose:up
+```
+
+Manual commands:
+
+```bash
+docker build -t playwright-portfolio-tests .
+
+docker run --rm \
+  -v ${PWD}/playwright-report:/app/playwright-report \
+  -v ${PWD}/test-results:/app/test-results \
+  playwright-portfolio-tests
+
+docker run --rm playwright-portfolio-tests npx playwright test --project=chromium
+```
+
+## CI/CD
+
+### Jenkins
+
+- Pipeline is defined in `Jenkinsfile`.
+- Setup guide: [JENKINS_SETUP.md](./JENKINS_SETUP.md)
+- Quick command reference: [QUICK_REFERENCE.md](./QUICK_REFERENCE.md)
+
+### GitHub Actions
+
+- Workflow file: `.github/workflows/playwright.yml`
+- Triggered on pushes and pull requests to `main`/`master`.
+- Uploads Playwright HTML report as a build artifact.
+
+## Project Structure
+
+```text
 playwright_portfolio_automation_typescript/
-├── page-objects/          # Page Object Models (POM)
-│   ├── helper.ts          # Utility functions and common actions
-│   ├── homePage.ts        # Landing page interactions
-│   └── resumePage.ts      # Resume page interactions
-├── tests/                 # Test specifications
-│   └── home.test.ts       # Main test suite (Home & Resume tests)
-├── test-data/             # Data used for testing
-├── playwright-report/     # Generated HTML test reports
-├── test-results/          # Artifacts from test runs
-├── node_modules/          # Project dependencies
-├── package.json           # Dependencies and scripts
-├── tsconfig.json          # TypeScript configuration
-└── playwright.config.ts   # Playwright configuration
+|-- page-objects/
+|   |-- helper.ts
+|   |-- homePage.ts
+|   |-- aboutPage.ts
+|   |-- projectsPage.ts
+|   |-- resumePage.ts
+|   |-- contactPage.ts
+|   |-- experiencePage.ts
+|   |-- educationPage.ts
+|   `-- certificationsPage.ts
+|-- tests/
+|   |-- home.test.ts
+|   |-- about.test.ts
+|   |-- projects.test.ts
+|   |-- resume.test.ts
+|   |-- contact.test.ts
+|   |-- experience.test.ts
+|   |-- education.test.ts
+|   `-- certifications.test.ts
+|-- .github/workflows/playwright.yml
+|-- Dockerfile
+|-- docker-compose.yml
+|-- Jenkinsfile
+|-- JENKINS_SETUP.md
+|-- QUICK_REFERENCE.md
+|-- package.json
+|-- playwright.config.ts
+`-- README.md
 ```
 
-## 🧪 Test Coverage
+## Notes
 
-The framework currently covers the following scenarios:
+- Tests run against the live production URL.
+- Test helpers centralize reusable API/link validation logic.
+- Framework is fully typed with TypeScript.
 
-### Home Page
-- **Navigation**: Verifies presence of navigation bar.
-- **Hero Section**: Checks main introductory content.
-- **Social Media**: Validates social links.
-- **Skills**: Verifies the technical skills section.
-- **Experience**: Checks the work experience timeline.
+## License
 
-### Resume Page
-- **Navigation**: Verifies transition to existing Resume page.
-- **PDF Download**: Tests the functionality of the "Download PDF" button and verifies the download.
-
-## 📝 Notes
-
-- **Page Object Model (POM)**: The project strictly follows the POM design pattern for maintainability.
-- **Live Testing**: Tests are executed against the live production URL.
-- **TypeScript**: Fully typed for better developer experience and reliability.
-
-## 📄 License
-
-This project is licensed under the ISC License.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+This project is licensed under the MIT License.
