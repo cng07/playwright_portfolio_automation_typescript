@@ -63,6 +63,89 @@ After running tests, view the HTML report:
 npx playwright show-report
 ```
 
+## 🐳 Docker Support
+
+Run tests in Docker containers for consistent, isolated execution:
+
+### Quick Start with Docker:
+```bash
+# Build Docker image
+npm run docker:build
+
+# Run tests in Docker
+npm run docker:run
+
+# Or use Docker Compose
+npm run docker:compose:up
+```
+
+### Manual Docker Commands:
+```bash
+# Build image
+docker build -t playwright-portfolio-tests .
+
+# Run all tests
+docker run --rm \
+  -v ${PWD}/playwright-report:/app/playwright-report \
+  -v ${PWD}/test-results:/app/test-results \
+  playwright-portfolio-tests
+
+# Run specific browser
+docker run --rm playwright-portfolio-tests npx playwright test --project=chromium
+```
+
+## 🔄 CI/CD with Jenkins
+
+This project is fully configured for Jenkins CI/CD with Docker integration.
+
+### Features:
+- ✅ **Parallel Execution** - Runs tests across Chromium, Firefox, WebKit simultaneously
+- ✅ **Docker Isolation** - Clean environment for each test run
+- ✅ **HTML Reports** - Interactive reports with screenshots/videos
+- ✅ **Email Notifications** - Alerts on success/failure
+- ✅ **Scheduled Runs** - Automated nightly testing
+- ✅ **GitHub Integration** - Trigger on push/PR
+
+### Setup Guide:
+📖 **See [JENKINS_SETUP.md](./JENKINS_SETUP.md)** for complete setup instructions
+
+### Quick Setup:
+1. Install required Jenkins plugins (Docker Pipeline, HTML Publisher, Email-ext)
+2. Create new Pipeline job pointing to `Jenkinsfile`
+3. Configure email notifications
+4. Run your first build!
+
+### Video Tutorials:
+- [Jenkins + Playwright Setup](https://www.youtube.com/watch?v=RBVswbsRDMQ) - Complete walkthrough
+- [Docker Integration](https://www.youtube.com/watch?v=7uKo-xnNXu0) - Pipeline setup
+- [Email Notifications](https://www.youtube.com/watch?v=FX322RVNGj4) - Config guide
+
+## 📜 Available npm Scripts
+
+```bash
+# Test execution
+npm test                    # Run all tests
+npm run test:headed         # Run with visible browser
+npm run test:ui             # Run in interactive UI mode
+npm run test:chrome         # Run only Chromium tests
+npm run test:firefox        # Run only Firefox tests
+npm run test:webkit         # Run only WebKit tests
+npm run test:debug          # Run in debug mode
+npm run test:smoke          # Run tests tagged @smoke
+
+# Reports
+npm run report              # Show HTML report
+
+# Docker
+npm run docker:build        # Build Docker image
+npm run docker:run          # Run tests in Docker
+npm run docker:compose:up   # Run with Docker Compose
+npm run docker:compose:down # Stop Docker Compose
+
+# CI/CD
+npm run ci                  # Run tests with CI reporters (HTML, JSON, JUnit)
+
+
 ## 📂 Project Structure
 
 ```
