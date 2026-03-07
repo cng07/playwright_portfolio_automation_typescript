@@ -2,7 +2,7 @@ import { test } from '@playwright/test'
 import { HomePage } from '../page-objects/homePage'
 import { CertificationsPage } from '../page-objects/certificationsPage'
 
-test.describe('Certifications page @runSolo', () => {
+test.describe('Certifications page', () => {
     test('Verify Certifications Page via navigation menu', async ({ page }) => {
         const homePage = new HomePage(page)
         const certificationsPage = new CertificationsPage(page)
