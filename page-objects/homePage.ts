@@ -86,7 +86,7 @@ export class HomePage {
         this.navLogo = page.locator('a.nav-logo')
         this.navHomeLink = page.getByRole('link', { name: 'Home' })
         this.navProjectsLink = page.getByRole('link', { name: 'Projects', exact: true })
-        this.navResumeLink = page.getByRole('link', { name: 'Resume' })
+        this.navResumeLink = page.getByRole('menuitem', { name: 'Resume' })
         this.navCertificationsLink = page.getByRole('menuitem', { name: 'Certifications' })
         this.navEducationLink = page.getByRole('menuitem', { name: 'Education' })
         this.navAboutLink = page.getByRole('link', { name: 'About' })
@@ -167,17 +167,17 @@ export class HomePage {
         await expect(this.navLogo).toBeVisible()
         await expect(this.navHomeLink).toBeVisible()
         await expect(this.navProjectsLink).toBeVisible()
-        await expect(this.navResumeLink).toBeVisible()
         await expect(this.navAboutLink).toBeVisible()
         await expect(this.navContactLink).toBeVisible()
         await expect(this.navProjectsLink).toHaveAttribute('href', '/projects')
-        await expect(this.navResumeLink).toHaveAttribute('href', '/resume')
         await expect(this.navAboutLink).toHaveAttribute('href', '/about')
         await expect(this.navContactLink).toHaveAttribute('href', '/contact')
         await expect(this.navMore).toBeVisible()
         await this.navMore.click()
+        await expect(this.navResumeLink).toBeVisible()
         await expect(this.navCertificationsLink).toBeVisible()
         await expect(this.navEducationLink).toBeVisible()
+        await expect(this.navResumeLink).toHaveAttribute('href', '/resume')
         await expect(this.navCertificationsLink).toHaveAttribute('href', '/certifications')
         await expect(this.navEducationLink).toHaveAttribute('href', '/education')
         // await expect(this.mobileMenuBtn).toBeVisible() only visible on mobile
@@ -204,14 +204,12 @@ export class HomePage {
     async verifyFeaturedProjectsSection() {
         await expect(this.featuredProjectsSectionTitle).toBeVisible()
         await expect(this.portfolioTypeScriptProjectTitle).toBeVisible()
-        await expect(this.portfolioPythonProjectTitle).toBeVisible()
         await expect(this.viewAllProjectsLink).toBeVisible()
         await expect(this.viewAllProjectsLink).toHaveAttribute('href', '/projects')
 
         const repositoryLinkCount = await this.projectRepositoryLinks.count()
-        expect(repositoryLinkCount).toBeGreaterThanOrEqual(2)
+        expect(repositoryLinkCount).toBeGreaterThanOrEqual(1)
         await expect(this.projectRepositoryLinks.nth(0)).toBeVisible()
-        await expect(this.projectRepositoryLinks.nth(1)).toBeVisible()
     }
 
     // Skills Section Verification

@@ -104,9 +104,12 @@ export class CertificationsPage {
 
     async goToCertificationsPageFromHomeNavigation() {
         await expect(this.navMore).toBeVisible()
-        await this.navMore.click()
+        await this.h.clickWithFallback(this.navMore)
         await expect(this.navCertificationsLink).toBeVisible()
-        await this.navCertificationsLink.click()
+        await Promise.all([
+            this.page.waitForURL(/\/certifications$/),
+            this.h.clickWithFallback(this.navCertificationsLink)
+        ])
         await this.page.waitForLoadState('domcontentloaded')
         await expect(this.page).toHaveURL(/\/certifications$/)
         await expect(this.page).toHaveTitle('Carlos Ng | Certifications')

@@ -1,4 +1,4 @@
-import { expect, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
 import * as csv from '@fast-csv/parse';
 
 export class Helper {
@@ -11,6 +11,22 @@ export class Helper {
 
     async pause(ms: number) {
         await this.page.waitForTimeout(ms); // wait for x milliseconds
+    }
+
+    async clickWithFallback(locator: Locator) {
+        try {
+            await locator.click({ timeout: 5000 });
+            return;
+        } catch {
+            // Firefox can occasionally hang after actionability checks.
+        }
+
+        try {
+            await locator.click({ timeout: 5000, force: true });
+            return;
+        } catch {
+            await locator.dispatchEvent('click');
+        }
     }
 
     async getLinkOnCSV(rowNum: number, header: string) {

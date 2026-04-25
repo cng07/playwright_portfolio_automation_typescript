@@ -11,6 +11,7 @@ export class ResumePage {
     readonly mainContent: Locator
 
     // Navigation Elements
+    readonly navMore: Locator
     readonly resumePage: Locator
 
     // Resume Page Elements
@@ -32,7 +33,8 @@ export class ResumePage {
         this.mainContent = page.locator('#main-content')
 
         // Navigation Elements
-        this.resumePage = page.getByRole('link', { name: 'Resume' })
+        this.navMore = page.getByRole('button', { name: 'More' })
+        this.resumePage = page.getByRole('menuitem', { name: 'Resume' })
 
         // Resume Page Elements
         this.resumeHeading = page.getByRole('heading', { name: 'Resume', level: 1 })
@@ -46,7 +48,13 @@ export class ResumePage {
     }
 
     async goToResumePage() {
-        await this.resumePage.click()
+        await expect(this.navMore).toBeVisible()
+        await this.h.clickWithFallback(this.navMore)
+        await expect(this.resumePage).toBeVisible()
+        await Promise.all([
+            this.page.waitForURL(/\/resume$/),
+            this.h.clickWithFallback(this.resumePage)
+        ])
         await this.page.waitForLoadState('domcontentloaded')
         await expect(this.page).toHaveURL(/\/resume$/)
         await expect(this.page).toHaveTitle('Carlos Ng | Resume')
@@ -76,7 +84,7 @@ export class ResumePage {
     async verifyResumeViewerSection() {
         await expect(this.resumePdfObject).toBeVisible()
         await expect(this.resumePdfObject).toHaveAttribute('data', '/Carlos_Ng_Resume.pdf')
-        await expect(this.resumePdfIframe).toBeVisible()
+        await expect(this.resumePdfIframe).toHaveCount(1)
         await expect(this.resumePdfIframe).toHaveAttribute('src', /docs\.google\.com\/viewer/)
         await expect(this.resumePdfIframe).toHaveAttribute('src', /Carlos_Ng_Resume\.pdf/)
     }

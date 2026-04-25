@@ -83,7 +83,10 @@ export class AboutPage {
     }
 
     async goToAboutPage() {
-        await this.navAboutLink.click()
+        await Promise.all([
+            this.page.waitForURL(/\/about$/),
+            this.h.clickWithFallback(this.navAboutLink)
+        ])
         await this.page.waitForLoadState('domcontentloaded')
         await expect(this.page).toHaveURL(/\/about$/)
         await expect(this.page).toHaveTitle('Carlos Ng | About')
